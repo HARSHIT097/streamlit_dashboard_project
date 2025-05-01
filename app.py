@@ -130,7 +130,7 @@ st.sidebar.markdown(download_link, unsafe_allow_html=True)
 st.sidebar.markdown(
     """
     <div style="text-align: center; margin-top: 20px; color: gray; font-size: 12px;">
-        © 2025 Your Name
+        © 2025 Harshit Singh
     </div>
     """,
     unsafe_allow_html=True
