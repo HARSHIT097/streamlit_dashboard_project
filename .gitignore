@@ -1,0 +1,52 @@
+# 🐍 Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# 🔧 Environment / Dependencies
+.env
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+.Python
+pip-log.txt
+poetry.lock
+
+# 🪟 Windows or macOS
+.DS_Store
+Thumbs.db
+
+# 📦 Virtual Environment
+cleanenv/
+.idea/
+.vscode/
+*.log
+
+# 💻 System
+*.sqlite3
+*.db
+*.bak
+*.swp
+*.swo
+*.tmp
+
+# 🧪 Jupyter / Data
+.ipynb_checkpoints
+*.csv
+*.tsv
+*.xlsx
+*.h5
+*.sav
+
+# 🔐 Secrets
+secret_*.py
+*.key
+*.pem
+
+# Streamlit cache
+.streamlit/config.toml
+.streamlit/secrets.toml

@@ -7,6 +7,11 @@ import base64
 
 st.set_page_config(page_title="Interactive Session Dashboard", layout="wide")
 
+# Sidebar title
+with st.sidebar:
+    st.title("📚 Dashboard Navigator")
+    st.markdown("Navigate between pages using the menu above.")
+
 # Sidebar Inputs
 st.sidebar.title("Input Session Data")
 
@@ -73,7 +78,6 @@ try:
 
 except Exception as e:
     st.error(f"Input Error: {e}")
-
 
 
 # --- Sidebar Footer Section ---
