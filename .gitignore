@@ -36,7 +36,7 @@ cleanenv/
 
 # 🧪 Jupyter / Data
 .ipynb_checkpoints
-*.csv
+#*.csv
 *.tsv
 *.xlsx
 *.h5
