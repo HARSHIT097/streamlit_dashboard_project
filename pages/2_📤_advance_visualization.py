@@ -1,6 +1,15 @@
 import streamlit as st
 import base64
 import streamlit.components.v1 as components
+import pandas as pd
+import plotly.express as px
+import seaborn as sns
+import matplotlib.pyplot as plt
+import io
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+from ydata_profiling import ProfileReport
 
 st.set_page_config(page_title="CSV Analyzer", layout="wide")
 
@@ -19,17 +28,6 @@ if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     st.success("Uploaded file successfully loaded.")
 else:
-
-    import pandas as pd
-    import plotly.express as px
-    import seaborn as sns
-    import matplotlib.pyplot as plt
-    import io
-    from sklearn.model_selection import train_test_split
-    from sklearn.ensemble import RandomForestClassifier
-    from sklearn.metrics import classification_report
-    from ydata_profiling import ProfileReport
-
     df = pd.read_csv("WineQT.csv")
     st.info("Default file 'abc.csv' is loaded.")
 
