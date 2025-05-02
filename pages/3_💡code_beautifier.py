@@ -9,16 +9,6 @@ import os
 # Force font path for pygments (bypass system font lookup)
 font_path = os.path.join("fonts", "DejaVuSansMono.ttf")  # Upload this font to your repo
 
-img_formatter = ImageFormatter(
-    font_name=font_path,
-    font_size=font_size,
-    line_numbers=line_numbers,
-    image_format="PNG",
-    line_pad=2,
-    style="default"
-)
-
-
 st.set_page_config(page_title="Code to RTF/Image Formatter", layout="wide")
 st.title("🧠 Code & Text Beautifier → Download as Image or RTF")
 
