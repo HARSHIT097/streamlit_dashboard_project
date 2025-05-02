@@ -5,6 +5,22 @@ from pygments.formatters import RtfFormatter, ImageFormatter
 from PIL import Image
 from io import BytesIO
 import matplotlib.font_manager as fm
+import platform
+
+def get_fonts():
+    # Use only predefined fonts on Streamlit Cloud to avoid fc-list dependency
+    if platform.system() != "Windows":
+        # Safe fallback fonts (skip fc-list on cloud)
+        return [
+            "Arial", "Calibri", "Courier New", "Georgia", "Impact", "Lucida Console",
+            "Segoe UI", "Times New Roman", "Verdana", "Comic Sans MS", "Consolas",
+            "Tahoma", "Trebuchet MS", "Palatino Linotype", "Gill Sans MT"
+        ]
+    else:
+        # Allow full detection on Windows if running locally
+        fonts = fm.findSystemFonts(fontpaths=None, fontext='ttf')
+        font_names = [fm.FontProperties(fname=font).get_name() for font in fonts]
+        return sorted(set(font_names))
 
 st.set_page_config(page_title="Code to RTF/Image Formatter", layout="wide")
 st.title("🧠 Code & Text Beautifier → Download as Image or RTF")
@@ -28,12 +44,14 @@ language_map = {
 }
 
 # Safe cross-platform monospaced fonts
-available_fonts = [
+available_fonts1 = [
     "Arial", "Calibri", "Courier New", "Georgia", "Impact", "Lucida Console",
     "Segoe UI", "Times New Roman", "Verdana", "Comic Sans MS", "Consolas",
     "Tahoma", "Trebuchet MS", "Palatino Linotype", "Gill Sans MT"
 ]
 
+
+available_fonts = get_fonts()
 language = st.sidebar.selectbox("Select Language", list(language_map.keys()))
 font_name = st.sidebar.selectbox("Font", available_fonts)
 font_size = st.sidebar.slider("Font Size", min_value=10, max_value=24, value=14)
