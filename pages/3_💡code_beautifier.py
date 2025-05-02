@@ -2,12 +2,17 @@ import streamlit as st
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import RtfFormatter, ImageFormatter
+from pygments.styles import get_all_styles
 from PIL import Image
 from io import BytesIO
 import os
 
 st.set_page_config(page_title="Code to RTF/Image Formatter", layout="wide")
 st.title("🧠 Code & Text Beautifier → Download as Image or RTF")
+
+# Available Pygments styles
+pygments_styles = sorted(list(get_all_styles()))
+selected_style = st.sidebar.selectbox("🎨 Syntax Theme", pygments_styles, index=pygments_styles.index("default"))
 
 # --- Sidebar options ---
 st.sidebar.header("🛠️ Format Settings")
@@ -64,7 +69,8 @@ def convert_code():
             line_numbers=line_numbers,
             image_format="PNG",
             line_pad=2,
-            style="default"
+            style=selected_style
+            #style="default"
         )
         image_bytes = highlight(code_input, lexer, img_formatter)
         image_buf.write(image_bytes)
