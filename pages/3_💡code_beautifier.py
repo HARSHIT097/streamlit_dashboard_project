@@ -4,23 +4,6 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import RtfFormatter, ImageFormatter
 from PIL import Image
 from io import BytesIO
-#import matplotlib.font_manager as fm
-import platform
-
-def get_fonts():
-    # Use only predefined fonts on Streamlit Cloud to avoid fc-list dependency
-    if platform.system() != "Windows":
-        # Safe fallback fonts (skip fc-list on cloud)
-        return [
-            "Arial", "Calibri", "Courier New", "Georgia", "Impact", "Lucida Console",
-            "Segoe UI", "Times New Roman", "Verdana", "Comic Sans MS", "Consolas",
-            "Tahoma", "Trebuchet MS", "Palatino Linotype", "Gill Sans MT"
-        ]
-    else:
-        # Allow full detection on Windows if running locally
-        fonts = fm.findSystemFonts(fontpaths=None, fontext='ttf')
-        font_names = [fm.FontProperties(fname=font).get_name() for font in fonts]
-        return sorted(set(font_names))
 
 st.set_page_config(page_title="Code to RTF/Image Formatter", layout="wide")
 st.title("🧠 Code & Text Beautifier → Download as Image or RTF")
@@ -43,15 +26,12 @@ language_map = {
     "Markdown": "markdown"
 }
 
-# Safe cross-platform monospaced fonts
+# Strictly use only known fonts that do not require fc-list
 available_fonts = [
-    "Arial", "Calibri", "Courier New", "Georgia", "Impact", "Lucida Console",
-    "Segoe UI", "Times New Roman", "Verdana", "Comic Sans MS", "Consolas",
-    "Tahoma", "Trebuchet MS", "Palatino Linotype", "Gill Sans MT"
+    "Courier New", "Consolas", "Lucida Console", "DejaVu Sans Mono",
+    "Monaco", "Arial", "Verdana", "Times New Roman"
 ]
 
-
-#available_fonts1 = get_fonts()
 language = st.sidebar.selectbox("Select Language", list(language_map.keys()))
 font_name = st.sidebar.selectbox("Font", available_fonts)
 font_size = st.sidebar.slider("Font Size", min_value=10, max_value=24, value=14)
@@ -76,7 +56,7 @@ def convert_code():
         lexer_name = language_map[language]
         lexer = get_lexer_by_name(lexer_name)
 
-        # Image conversion
+        # Image conversion (safe default font only)
         img_formatter = ImageFormatter(
             font_name=font_name,
             font_size=font_size,
@@ -100,7 +80,7 @@ def convert_code():
         return preview_image
 
     except Exception as e:
-        st.error(f"Error during conversion: {e}")
+        st.error(f"❌ Error during conversion: {e}")
         return None
 
 # --- Convert button ---
