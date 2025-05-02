@@ -4,7 +4,7 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import RtfFormatter, ImageFormatter
 from PIL import Image
 from io import BytesIO
-import matplotlib.font_manager as fm
+#import matplotlib.font_manager as fm
 import platform
 
 def get_fonts():
@@ -44,14 +44,14 @@ language_map = {
 }
 
 # Safe cross-platform monospaced fonts
-available_fonts1 = [
+available_fonts = [
     "Arial", "Calibri", "Courier New", "Georgia", "Impact", "Lucida Console",
     "Segoe UI", "Times New Roman", "Verdana", "Comic Sans MS", "Consolas",
     "Tahoma", "Trebuchet MS", "Palatino Linotype", "Gill Sans MT"
 ]
 
 
-available_fonts = get_fonts()
+#available_fonts1 = get_fonts()
 language = st.sidebar.selectbox("Select Language", list(language_map.keys()))
 font_name = st.sidebar.selectbox("Font", available_fonts)
 font_size = st.sidebar.slider("Font Size", min_value=10, max_value=24, value=14)
