@@ -34,16 +34,13 @@ def get_fonts():
     font_names = [fm.FontProperties(fname=font).get_name() for font in fonts]
     return sorted(font_names)
 
-available_fonts= get_fonts()
+#available_fonts= get_fonts()
+#print(available_fonts)
 # Safe cross-platform monospaced fonts
-available_fonts1 = [
-    "Courier New",
-    "Consolas",
-    #"Liberation Mono",
-    #"DejaVu Sans Mono",
-    #"Menlo",
-    #"Monaco",
-    #"Ubuntu Mono"
+available_fonts = [
+    "Arial", "Calibri", "Courier New", "Georgia", "Impact", "Lucida Console",
+    "Segoe UI", "Times New Roman", "Verdana", "Comic Sans MS", "Consolas",
+    "Tahoma", "Trebuchet MS", "Palatino Linotype", "Gill Sans MT"
 ]
 
 language = st.sidebar.selectbox("Select Language", list(language_map.keys()))
