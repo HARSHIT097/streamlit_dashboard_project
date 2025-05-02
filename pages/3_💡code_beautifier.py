@@ -6,9 +6,6 @@ from PIL import Image
 from io import BytesIO
 import os
 
-# Force font path for pygments (bypass system font lookup)
-font_path = os.path.join("fonts", "DejaVuSansMono.ttf")  # Upload this font to your repo
-
 st.set_page_config(page_title="Code to RTF/Image Formatter", layout="wide")
 st.title("🧠 Code & Text Beautifier → Download as Image or RTF")
 
@@ -30,14 +27,11 @@ language_map = {
     "Markdown": "markdown"
 }
 
-# Strictly use only known fonts that do not require fc-list
-available_fonts = [
-    "Courier New", "Consolas", "Lucida Console", "DejaVu Sans Mono",
-    "Monaco", "Arial", "Verdana", "Times New Roman"
+# Safe preset fonts (names for RTF), but we use a bundled font file for image rendering
+rtf_font_options = [
+    "Courier New", "Consolas", "Lucida Console", "Arial", "Calibri", "Verdana", "Georgia"
 ]
-
-language = st.sidebar.selectbox("Select Language", list(language_map.keys()))
-font_name = st.sidebar.selectbox("Font", available_fonts)
+rtf_font_name = st.sidebar.selectbox("RTF Font (Name Only)", rtf_font_options)
 font_size = st.sidebar.slider("Font Size", min_value=10, max_value=24, value=14)
 line_numbers = st.sidebar.checkbox("Show Line Numbers", value=True)
 
@@ -45,12 +39,15 @@ line_numbers = st.sidebar.checkbox("Show Line Numbers", value=True)
 st.subheader("📝 Paste your code or text below:")
 code_input = st.text_area("Code/Text Input", height=200)
 
-# --- Output buffers ---
+# Output buffers
 image_buf = BytesIO()
 rtf_buf = BytesIO()
 
+# Use bundled .ttf file for image rendering
+image_font_path = os.path.join("fonts", "DejaVuSansMono.ttf")  # Must exist in /fonts/
+
 def convert_code():
-    """Converts the input code to syntax-highlighted RTF and image formats."""
+    """Converts code to RTF and Image formats using a bundled font."""
     image_buf.truncate(0)
     image_buf.seek(0)
     rtf_buf.truncate(0)
@@ -60,23 +57,26 @@ def convert_code():
         lexer_name = language_map[language]
         lexer = get_lexer_by_name(lexer_name)
 
-        # Image conversion (safe default font only)
+        # --- Image Formatter ---
         img_formatter = ImageFormatter(
-            font_name=font_name,
+            font_name=image_font_path,  # Full path to .ttf file
             font_size=font_size,
             line_numbers=line_numbers,
             image_format="PNG",
             line_pad=2,
             style="default"
         )
-
         image_bytes = highlight(code_input, lexer, img_formatter)
         image_buf.write(image_bytes)
         image_buf.seek(0)
         preview_image = Image.open(BytesIO(image_bytes))
 
-        # RTF conversion
-        rtf_formatter = RtfFormatter(fontface=font_name, fontsize=font_size, linenos=line_numbers)
+        # --- RTF Formatter ---
+        rtf_formatter = RtfFormatter(
+            fontface=rtf_font_name,
+            fontsize=font_size,
+            linenos=line_numbers
+        )
         rtf_data = highlight(code_input, lexer, rtf_formatter)
         rtf_buf.write(rtf_data.encode('utf-8'))
         rtf_buf.seek(0)
@@ -86,6 +86,9 @@ def convert_code():
     except Exception as e:
         st.error(f"❌ Error during conversion: {e}")
         return None
+
+# --- Language Selection ---
+language = st.sidebar.selectbox("Select Language", list(language_map.keys()))
 
 # --- Convert button ---
 if st.button("⚙️ Process & Preview"):
